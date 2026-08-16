@@ -1,0 +1,8 @@
+[package]
+name = "sudokoo-linux"
+version = "0.1.0"
+edition = "2024"
+authors = ["Anthony Greenberg <info@bayesicresearch.org>"]
+license = "3BSD"
+
+[dependencies]

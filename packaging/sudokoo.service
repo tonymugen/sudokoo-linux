@@ -1,0 +1,50 @@
+[Unit]
+Description=Sudokoo SK700V cooler panel
+Documentation=https://github.com/tonymugen/sudokoo-linux
+After=multi-user.target
+
+[Service]
+Type=exec
+# --tdp should match the CPU: it scales the power estimate and the panel's load bar.
+ExecStart=/usr/local/bin/sudokoo stream --tdp 65
+
+# The device wedges off the USB bus after some warm reboots, and the panel blanks a few
+# seconds after the last frame it accepted, so restarting is the whole recovery story.
+Restart=always
+RestartSec=5
+
+# SIGTERM is handled: the panel is blanked before exit rather than left to time out.
+KillSignal=SIGTERM
+TimeoutStopSec=10
+
+# Runs as root so RAPL package power is readable — /sys/class/powercap/*/energy_uj is
+# mode 0400. Unprivileged, the driver still works but estimates power from load.
+# Everything below narrows what root can reach.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateNetwork=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+CapabilityBoundingSet=
+# PrivateDevices= would hide the panel, so allow just its device class instead.
+DevicePolicy=closed
+DeviceAllow=char-hidraw rw
+
+[Install]
+WantedBy=multi-user.target

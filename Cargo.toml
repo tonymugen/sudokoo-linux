@@ -5,4 +5,8 @@ edition = "2024"
 authors = ["Anthony Greenberg <info@bayesicresearch.org>"]
 license = "3BSD"
 
+[[bin]]
+name = "sudokoo"
+path = "src/main.rs"
+
 [dependencies]

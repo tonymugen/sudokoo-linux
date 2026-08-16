@@ -1,0 +1,10 @@
+# Sudokoo SK700V (381c:0003) — let logged-in users write to the panel's hidraw node.
+#
+# Install:
+#   sudo install -m 0644 99-sudokoo.rules /etc/udev/rules.d/99-sudokoo.rules
+#   sudo udevadm control --reload
+#   sudo udevadm trigger -s hidraw        # or just unplug and replug the fan
+#
+# Not needed when the service runs as root, which it does by default so that RAPL
+# package power is readable.
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="381c", ATTRS{idProduct}=="0003", MODE="0660", GROUP="users", TAG+="uaccess"
